@@ -49,5 +49,6 @@ else:
     from tablib.packages.odf import opendocument, style, text, table
 
     from tablib.packages import unicodecsv as csv
+    from tablib.packages.dbfpy import dbf
 
     unicode = unicode
