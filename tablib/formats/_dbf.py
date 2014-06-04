@@ -2,12 +2,10 @@
 
 """ Tablib - DBF Support.
 """
-from types import IntType, FloatType
 import tempfile
 import struct
 
 from tablib.compat import StringIO
-import dbfpy
 from tablib.packages.dbfpy import dbf
 from tablib.packages.dbfpy import dbfnew
 from tablib.packages.dbfpy import record as dbfrecord
@@ -26,7 +24,7 @@ def export_set(dataset):
     # create the appropriate fields based on the contents of the first row
     first_row = dataset[0]
     for fieldname, field_value in zip(dataset.headers, first_row):
-        if type(field_value) in [IntType, FloatType]:
+        if type(field_value) in [int, float]:
             new_dbf.add_field(fieldname, 'N', 10, 8)
         else:
             new_dbf.add_field(fieldname, 'C', 80)
