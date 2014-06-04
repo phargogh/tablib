@@ -122,7 +122,11 @@ class DbfHeader(object):
         # position 0 is for the deletion flag
         _pos = 1
         _data = stream.read(1)
-        while _data[0] != "\x0D":
+
+        # The field definitions are ended either by \x0D OR a newline
+        # character, so we need to handle both when reading from a stream.
+        # When writing, dbfpy appears to write newlines instead of \x0D.
+        while _data[0] not in ["\x0D", "\n"]:
             _data += stream.read(31)
             _fld = fields.lookupFor(_data[11]).fromString(_data, _pos)
             _obj._addField(_fld)
