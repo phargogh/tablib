@@ -467,7 +467,7 @@ class TablibTestCase(unittest.TestCase):
         data.append(self.tom)
         data.headers = self.headers
 
-        _regression_dbf = ('\x03r\x06\x03\x03\x00\x00\x00\x81\x00\xab\x00\x00'
+        _regression_dbf = ('\x03r\x06\x04\x03\x00\x00\x00\x81\x00\xab\x00\x00'
             '\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
             '\x00\x00\x00FIRST_NAME\x00C\x00\x00\x00\x00P\x00\x00\x00\x00\x00'
             '\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00LAST_NAME\x00\x00C\x00'
@@ -486,7 +486,14 @@ class TablibTestCase(unittest.TestCase):
         _regression_dbf += ' 50.0000000'
         _regression_dbf += '\x1a'
 
-        self.assertEqual(_regression_dbf, data.dbf)
+        try:
+            self.assertEqual(_regression_dbf, data.dbf)
+        except AssertionError:
+            index = 0
+            for reg_char, data_char in zip(_regression_dbf, data.dbf):
+                if reg_char != data_char:
+                    raise AssertionError('Failing at char %s' % index)
+                index += 1
 
     def test_dbf_format_detect(self):
         """Test the DBF format detection."""
