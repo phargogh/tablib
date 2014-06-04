@@ -450,6 +450,34 @@ class TablibTestCase(unittest.TestCase):
         self.assertEqual(_tsv, data.tsv)
 
 
+    def test_dbf_import_set(self):
+        """Test DBF import."""
+        data.append(self.john)
+        data.append(self.george)
+        data.append(self.tom)
+        data.headers = self.headers
+
+        _regression_dbf = ('\x03r\x06\x03\x03\x00\x00\x00\x81\x00\xab\x00\x00'
+            '\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+            '\x00\x00\x00FIRST_NAME\x00C\x00\x00\x00\x00P\x00\x00\x00\x00\x00'
+            '\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00LAST_NAME\x00\x00C\x00'
+            '\x00\x00\x00P\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+            '\x00\x00GPA\x00\x00\x00\x00\x00\x00\x00\x00N\x00\x00\x00\x00\n'
+            '\x08\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\n'
+        )
+        _regression_dbf += ' John%s' % (' ' * 75)
+        _regression_dbf += ' Adams%s' % (' ' * 74)
+        _regression_dbf += ' 90.0000000'
+        _regression_dbf += ' George%s' % (' ' * 73)
+        _regression_dbf += ' Washington%s' % (' ' * 69)
+        _regression_dbf += ' 67.0000000'
+        _regression_dbf += ' Thomas%s' % (' ' * 73)
+        _regression_dbf += ' Jefferson%s' % (' ' * 70)
+        _regression_dbf += ' 50.0000000'
+        _regression_dbf += '\x1a'
+
+        self.assertEqual(_regression_dbf, data.dbf)
+
     def test_csv_format_detect(self):
         """Test CSV format detection."""
 
