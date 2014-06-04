@@ -7,9 +7,9 @@ import tempfile
 
 from tablib.compat import StringIO
 import dbfpy
-from dbfpy import dbf
-from dbfpy import dbfnew
-from dbfpy import record as dbfrecord
+from tablib.packages.dbfpy import dbf
+from tablib.packages.dbfpy import dbfnew
+from tablib.packages.dbfpy import record as dbfrecord
 
 
 title = 'dbf'
