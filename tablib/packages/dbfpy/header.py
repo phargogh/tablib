@@ -19,13 +19,17 @@ __date__ = "$Date: 2010/09/16 05:06:39 $"[7:-2]
 
 __all__ = ["DbfHeader"]
 
-import cStringIO
+try:
+    import cStringIO
+except ImportError:
+    # when we're in python3, we cStringIO has been replaced by io.StringIO
+    import io as cStringIO
 import datetime
 import struct
 import time
 
-import fields
-from utils import getDate
+from . import fields
+from . import utils
 
 
 class DbfHeader(object):
@@ -86,7 +90,7 @@ class DbfHeader(object):
             self.fields = []
         else:
             self.fields = list(fields)
-        self.lastUpdate = getDate(lastUpdate)
+        self.lastUpdate = utils.getDate(lastUpdate)
         self.recordLength = recordLength
         self.headerLength = headerLength
         self.recordCount = recordCount
