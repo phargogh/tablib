@@ -4,6 +4,7 @@
 """
 from types import IntType, FloatType
 import tempfile
+import struct
 
 from tablib.compat import StringIO
 import dbfpy
@@ -59,9 +60,11 @@ def detect(stream):
     try:
         _dbf = dbf.Dbf(StringIO(stream), readOnly=True)
         return True
-    except ValueError:
+    except (ValueError, struct.error):
         # When we try to open up a file that's not a DBF, dbfpy raises a
         # ValueError.
+        # When unpacking a string argument with less than 8 chars, struct.error is
+        # raised.
         return False
 
 
