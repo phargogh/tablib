@@ -451,6 +451,16 @@ class TablibTestCase(unittest.TestCase):
 
 
     def test_dbf_import_set(self):
+        data.append(self.john)
+        data.append(self.george)
+        data.headers = self.headers
+
+        _dbf = data.dbf
+        data.dbf = _dbf
+
+        self.assertEqual(_dbf, data.dbf)
+
+    def test_dbf_export_set(self):
         """Test DBF import."""
         data.append(self.john)
         data.append(self.george)
