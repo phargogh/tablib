@@ -509,10 +509,19 @@ class TablibTestCase(unittest.TestCase):
         _dbf += ' 50.0000000'
         _dbf += '\x1a'
 
+        _yaml = '- {age: 90, first_name: John, last_name: Adams}'
+        _tsv = 'foo\tbar'
+        _csv = '1,2,3\n4,5,6\n7,8,9\n'
+        _json = '[{"last_name": "Adams","age": 90,"first_name": "John"}]'
+
         _bunk = (
             '¡¡¡¡¡¡¡¡£™∞¢£§∞§¶•¶ª∞¶•ªº••ª–º§•†•§º¶•†¥ª–º•§ƒø¥¨©πƒø†ˆ¥ç©¨√øˆ¥≈†ƒ¥ç©ø¨çˆ¥ƒçø¶'
         )
         self.assertTrue(tablib.formats.dbf.detect(_dbf))
+        self.assertFalse(tablib.formats.dbf.detect(_yaml))
+        self.assertFalse(tablib.formats.dbf.detect(_tsv))
+        self.assertFalse(tablib.formats.dbf.detect(_csv))
+        self.assertFalse(tablib.formats.dbf.detect(_json))
         self.assertFalse(tablib.formats.dbf.detect(_bunk))
 
     def test_csv_format_detect(self):
