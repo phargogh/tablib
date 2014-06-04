@@ -488,6 +488,33 @@ class TablibTestCase(unittest.TestCase):
 
         self.assertEqual(_regression_dbf, data.dbf)
 
+    def test_dbf_format_detect(self):
+        """Test the DBF format detection."""
+        _dbf = ('\x03r\x06\x03\x03\x00\x00\x00\x81\x00\xab\x00\x00'
+            '\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+            '\x00\x00\x00FIRST_NAME\x00C\x00\x00\x00\x00P\x00\x00\x00\x00\x00'
+            '\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00LAST_NAME\x00\x00C\x00'
+            '\x00\x00\x00P\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+            '\x00\x00GPA\x00\x00\x00\x00\x00\x00\x00\x00N\x00\x00\x00\x00\n'
+            '\x08\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\n'
+        )
+        _dbf += ' John%s' % (' ' * 75)
+        _dbf += ' Adams%s' % (' ' * 74)
+        _dbf += ' 90.0000000'
+        _dbf += ' George%s' % (' ' * 73)
+        _dbf += ' Washington%s' % (' ' * 69)
+        _dbf += ' 67.0000000'
+        _dbf += ' Thomas%s' % (' ' * 73)
+        _dbf += ' Jefferson%s' % (' ' * 70)
+        _dbf += ' 50.0000000'
+        _dbf += '\x1a'
+
+        _bunk = (
+            '¡¡¡¡¡¡¡¡£™∞¢£§∞§¶•¶ª∞¶•ªº••ª–º§•†•§º¶•†¥ª–º•§ƒø¥¨©πƒø†ˆ¥ç©¨√øˆ¥≈†ƒ¥ç©ø¨çˆ¥ƒçø¶'
+        )
+        self.assertTrue(tablib.formats.dbf.detect(_dbf))
+        self.assertFalse(tablib.formats.dbf.detect(_bunk))
+
     def test_csv_format_detect(self):
         """Test CSV format detection."""
 
