@@ -143,7 +143,7 @@ class dbf_new(object):
         _dbfh.write(_dbfStream)
         _dbfStream.close()
 
-    def write_stream(self, stream)
+    def write_stream(self, stream):
         _dbfh = DbfHeader()
         _dbfh.setCurrentDate()
         for _fldDef in self.fields:
