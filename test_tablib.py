@@ -458,7 +458,17 @@ class TablibTestCase(unittest.TestCase):
         _dbf = data.dbf
         data.dbf = _dbf
 
-        self.assertEqual(_dbf, data.dbf)
+        #self.assertEqual(_dbf, data.dbf)
+        try:
+            self.assertEqual(_dbf, data.dbf)
+        except AssertionError:
+            index = 0
+            for reg_char, data_char in zip(_dbf, data.dbf):
+                if reg_char != data_char and index not in [1, 2, 3]:
+                    raise AssertionError('Failing at char %s: %s vs %s' % (
+                        index, reg_char,
+                        data_char))
+                index += 1
 
     def test_dbf_export_set(self):
         """Test DBF import."""
@@ -467,32 +477,42 @@ class TablibTestCase(unittest.TestCase):
         data.append(self.tom)
         data.headers = self.headers
 
-        _regression_dbf = ('\x03r\x06\x04\x03\x00\x00\x00\x81\x00\xab\x00\x00'
-            '\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
-            '\x00\x00\x00FIRST_NAME\x00C\x00\x00\x00\x00P\x00\x00\x00\x00\x00'
-            '\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00LAST_NAME\x00\x00C\x00'
-            '\x00\x00\x00P\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
-            '\x00\x00GPA\x00\x00\x00\x00\x00\x00\x00\x00N\x00\x00\x00\x00\n'
-            '\x08\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\n'
+        _regression_dbf = (b'\x03r\x06\x06\x03\x00\x00\x00\x81\x00\xab\x00\x00'
+            b'\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+            b'\x00\x00\x00FIRST_NAME\x00C\x00\x00\x00\x00P\x00\x00\x00\x00\x00'
+            b'\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00LAST_NAME\x00\x00C\x00'
+            b'\x00\x00\x00P\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+            b'\x00\x00GPA\x00\x00\x00\x00\x00\x00\x00\x00N\x00\x00\x00\x00\n'
+            b'\x08\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\r'
         )
-        _regression_dbf += ' John%s' % (' ' * 75)
-        _regression_dbf += ' Adams%s' % (' ' * 74)
-        _regression_dbf += ' 90.0000000'
-        _regression_dbf += ' George%s' % (' ' * 73)
-        _regression_dbf += ' Washington%s' % (' ' * 69)
-        _regression_dbf += ' 67.0000000'
-        _regression_dbf += ' Thomas%s' % (' ' * 73)
-        _regression_dbf += ' Jefferson%s' % (' ' * 70)
-        _regression_dbf += ' 50.0000000'
-        _regression_dbf += '\x1a'
+        _regression_dbf += b' John' + (b' ' * 75)
+        _regression_dbf += b' Adams' + (b' ' * 74)
+        _regression_dbf += b' 90.0000000'
+        _regression_dbf += b' George' + (b' ' * 73)
+        _regression_dbf += b' Washington' + (b' ' * 69)
+        _regression_dbf += b' 67.0000000'
+        _regression_dbf += b' Thomas' + (b' ' * 73)
+        _regression_dbf += b' Jefferson' + (b' ' * 70)
+        _regression_dbf += b' 50.0000000'
+        _regression_dbf += b'\x1a'
+
+        if is_py3:
+            # If in python3, decode regression string to binary.
+            #_regression_dbf = bytes(_regression_dbf, 'utf-8')
+            #_regression_dbf = _regression_dbf.replace(b'\n', b'\r')
+            pass
 
         try:
             self.assertEqual(_regression_dbf, data.dbf)
         except AssertionError:
             index = 0
+            found_so_far = ''
             for reg_char, data_char in zip(_regression_dbf, data.dbf):
-                if reg_char != data_char:
-                    raise AssertionError('Failing at char %s' % index)
+                #found_so_far += chr(data_char)
+                if reg_char != data_char and index not in [1, 2, 3]:
+                    raise AssertionError(
+                        'Failing at char %s: %s vs %s (found %s)' % (
+                        index, reg_char, data_char, found_so_far))
                 index += 1
 
     def test_dbf_format_detect(self):
