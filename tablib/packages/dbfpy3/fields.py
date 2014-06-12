@@ -96,7 +96,6 @@ class DbfFieldDef(object):
             decimalCount = 0
         ## set fields
         self.name = name
-        print("NAME_INIT", name, type(name))
         # FIXME: validate length according to the specification at
         # http://www.clicketyclick.dk/databases/xbase/format/data_types.html
         self.length = length
@@ -214,7 +213,6 @@ class DbfCharacterFieldDef(DbfFieldDef):
 
     def encodeValue(self, value):
         """Return raw data string encoded from a ``value``."""
-#        print('Encoded value', str(value)[:self.length].ljust(self.length))
         return str(value)[:self.length].ljust(self.length)
 
 
@@ -455,7 +453,6 @@ def lookupFor(typeCode):
     """
     # XXX: use typeCode.upper()? in case of any decign don't
     # forget to look to the same comment in ``registerField``
-    print("TYPECODE", typeCode, chr(typeCode))
     return _fieldsRegistry[chr(typeCode)]
 
 ## register generic types

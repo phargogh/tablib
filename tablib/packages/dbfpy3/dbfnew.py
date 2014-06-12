@@ -131,7 +131,6 @@ class dbf_new(object):
                 decimal precision. used only for the numric fields.
 
         """
-        print("NAME_TYPE", name, type(name))
         self.fields.append(self.FieldDefinitionClass(name, typ, len, dec))
 
     def write(self, filename):

@@ -128,7 +128,6 @@ class DbfHeader(object):
         _data = stream.read(1)
         while _data != b'\r':
             _data += stream.read(31)
-            print("DATA", len(_data), _data)
             _fld = fields.lookupFor(_data[11]).fromString(_data, _pos)
             _obj._addField(_fld)
             _pos = _fld.end
@@ -235,7 +234,6 @@ Version (signature): 0x%02x
 
     def write(self, stream):
         """Encode and write header to the stream."""
-        print("TOSTREAM type", type(stream))
         stream.seek(0)
         stream.write(self.toString())
         fields = [_fld.toString() for _fld in self.fields]

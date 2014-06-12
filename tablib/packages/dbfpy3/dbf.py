@@ -202,13 +202,8 @@ class Dbf(object):
     def indexOfFieldName(self, name):
         """Index of field named ``name``."""
         # FIXME: move this to header class
-        print("HEADERS", self.header.fields)
-        #return self.header[name]
-        print("HEADERS", type(self.header.fields[0]))
         names = [f.name for f in self.header.fields]
-        print("NAMES", names)
         return names.index(name.upper())
-        #return self.header.fields.index(name)
 
     def newRecord(self):
         """Return new record, which belong to this table."""
