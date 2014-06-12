@@ -39,14 +39,20 @@ def export_set(dataset):
         record.store()
 
     dbf_file.close()
-    stream = StringIO(open(temp_uri, 'rbU').read())
+    if is_py3:
+        stream = io.BytesIO(open(temp_uri, 'rb').read())
+    else:
+        stream = StringIO(open(temp_uri, 'rb').read())
     return stream.getvalue()
 
 def import_set(dset, in_stream, headers=True):
     """Returns a dataset from a DBF stream."""
 
     dset.wipe()
-    _dbf = dbf.Dbf(StringIO(in_stream))
+    if is_py3:
+        _dbf = dbf.Dbf(io.BytesIO(in_stream))
+    else:
+        _dbf = dbf.Dbf(StringIO(in_stream))
     dset.headers = _dbf.fieldNames
     for record in range(_dbf.recordCount):
         row = [_dbf[record][f] for f in _dbf.fieldNames]
@@ -56,7 +62,10 @@ def detect(stream):
     """Returns True if the given stream is valid DBF"""
     #_dbf = dbf.Table(StringIO(stream))
     try:
-        _dbf = dbf.Dbf(StringIO(stream), readOnly=True)
+        if is_py3:
+            _dbf = dbf.Dbf(io.BytesIO(bytes(stream, 'utf-8')), readOnly=True)
+        else:
+            _dbf = dbf.Dbf(StringIO(stream), readOnly=True)
         return True
     except (ValueError, struct.error):
         # When we try to open up a file that's not a DBF, dbfpy raises a
