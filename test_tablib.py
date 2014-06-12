@@ -463,11 +463,12 @@ class TablibTestCase(unittest.TestCase):
             self.assertEqual(_dbf, data.dbf)
         except AssertionError:
             index = 0
+            so_far = ''
             for reg_char, data_char in zip(_dbf, data.dbf):
+                so_far += chr(data_char)
                 if reg_char != data_char and index not in [1, 2, 3]:
-                    raise AssertionError('Failing at char %s: %s vs %s' % (
-                        index, reg_char,
-                        data_char))
+                    raise AssertionError('Failing at char %s: %s vs %s %s' % (
+                        index, reg_char, data_char, so_far))
                 index += 1
 
     def test_dbf_export_set(self):
@@ -517,24 +518,24 @@ class TablibTestCase(unittest.TestCase):
 
     def test_dbf_format_detect(self):
         """Test the DBF format detection."""
-        _dbf = ('\x03r\x06\x03\x03\x00\x00\x00\x81\x00\xab\x00\x00'
-            '\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
-            '\x00\x00\x00FIRST_NAME\x00C\x00\x00\x00\x00P\x00\x00\x00\x00\x00'
-            '\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00LAST_NAME\x00\x00C\x00'
-            '\x00\x00\x00P\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
-            '\x00\x00GPA\x00\x00\x00\x00\x00\x00\x00\x00N\x00\x00\x00\x00\n'
-            '\x08\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\n'
+        _dbf = (b'\x03r\x06\x03\x03\x00\x00\x00\x81\x00\xab\x00\x00'
+            b'\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+            b'\x00\x00\x00FIRST_NAME\x00C\x00\x00\x00\x00P\x00\x00\x00\x00\x00'
+            b'\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00LAST_NAME\x00\x00C\x00'
+            b'\x00\x00\x00P\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+            b'\x00\x00GPA\x00\x00\x00\x00\x00\x00\x00\x00N\x00\x00\x00\x00\n'
+            b'\x08\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\r'
         )
-        _dbf += ' John%s' % (' ' * 75)
-        _dbf += ' Adams%s' % (' ' * 74)
-        _dbf += ' 90.0000000'
-        _dbf += ' George%s' % (' ' * 73)
-        _dbf += ' Washington%s' % (' ' * 69)
-        _dbf += ' 67.0000000'
-        _dbf += ' Thomas%s' % (' ' * 73)
-        _dbf += ' Jefferson%s' % (' ' * 70)
-        _dbf += ' 50.0000000'
-        _dbf += '\x1a'
+        _dbf += b' John' + (b' ' * 75)
+        _dbf += b' Adams' + (b' ' * 74)
+        _dbf += b' 90.0000000'
+        _dbf += b' George' + (b' ' * 73)
+        _dbf += b' Washington' + (b' ' * 69)
+        _dbf += b' 67.0000000'
+        _dbf += b' Thomas' + (b' ' * 73)
+        _dbf += b' Jefferson' + (b' ' * 70)
+        _dbf += b' 50.0000000'
+        _dbf += b'\x1a'
 
         _yaml = '- {age: 90, first_name: John, last_name: Adams}'
         _tsv = 'foo\tbar'

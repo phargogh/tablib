@@ -63,7 +63,9 @@ def detect(stream):
     #_dbf = dbf.Table(StringIO(stream))
     try:
         if is_py3:
-            _dbf = dbf.Dbf(io.BytesIO(bytes(stream, 'utf-8')), readOnly=True)
+            if type(stream) is not bytes:
+                stream = bytes(stream, 'utf-8')
+            _dbf = dbf.Dbf(io.BytesIO(stream), readOnly=True)
         else:
             _dbf = dbf.Dbf(StringIO(stream), readOnly=True)
         return True
