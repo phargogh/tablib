@@ -65,7 +65,9 @@ setup(
         'tablib.packages.openpyxl3.writer',
         'tablib.packages.yaml',
         'tablib.packages.yaml3',
-        'tablib.packages.unicodecsv'
+        'tablib.packages.unicodecsv',
+        'tablib.packages.dbfpy',
+        'tablib.packages.dbfpy3',
     ],
     license='MIT',
     classifiers=(
