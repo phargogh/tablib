@@ -28,6 +28,7 @@ if is_py3:
     from tablib.packages import markup3 as markup
     from tablib.packages import openpyxl3 as openpyxl
     from tablib.packages.odf3 import opendocument, style, text, table
+    import tablib.packages.dbfpy3 as dbfpy
 
     import csv
     from io import StringIO
@@ -49,6 +50,6 @@ else:
     from tablib.packages.odf import opendocument, style, text, table
 
     from tablib.packages import unicodecsv as csv
-    from tablib.packages.dbfpy import dbf
+    import tablib.packages.dbfpy as dbfpy
 
     unicode = unicode
