@@ -4,6 +4,7 @@
 """
 import tempfile
 import struct
+import os
 
 from tablib.compat import StringIO
 from tablib.compat import dbfpy
@@ -48,10 +49,13 @@ def export_set(dataset):
         record.store()
 
     dbf_file.close()
+    dbf_stream = open(temp_uri, 'rb')
     if is_py3:
-        stream = io.BytesIO(open(temp_uri, 'rb').read())
+        stream = io.BytesIO(dbf_stream.read())
     else:
-        stream = StringIO(open(temp_uri, 'rb').read())
+        stream = StringIO(dbf_stream.read())
+    dbf_stream.close()
+    os.remove(temp_uri)
     return stream.getvalue()
 
 def import_set(dset, in_stream, headers=True):
