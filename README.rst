@@ -127,6 +127,7 @@ EXCEL!
 DBF!
 ++++
 ::
+
     >>> with open('people.dbf', 'wb') as f:
     ...     f.write(data.dbf)
 
