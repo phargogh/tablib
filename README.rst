@@ -124,8 +124,8 @@ EXCEL!
 	>>> with open('people.xls', 'wb') as f:
 	...     f.write(data.xls)
 
-DBF
-+++
+DBF!
+++++
 ::
     >>> with open('people.dbf', 'wb') as f:
     ...     f.write(data.dbf)
